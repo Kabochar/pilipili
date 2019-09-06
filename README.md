@@ -34,7 +34,7 @@
 -   视图
     -   序列化器 serializer
 
-
+#### 
 
 ### V0.2 视频系列模块
 
@@ -150,3 +150,59 @@ modified:   server/router.go，路由，用户登陆保护的 auth := v1.Group("
 modified:   tasks/cron.go，定时任务的 error 条件判定缺失
 
 modified:   tasks/rank.go
+
+
+
+### V0.5 用户系统
+
+#### 相关接口
+
+用户登陆：POST api/v1/user/register
+
+用户注册：POST api/v1/user/login
+
+用户详情：GET api/v1//user/me
+
+用户退出：DELETE api/v1/user/logout
+
+#### 相关知识
+
+POINTS: 加密问题，session 处理问题。
+
+##### Cookie
+
+保存在用户浏览器上一个文本文件，可以记录用户信息，待下次发送请求带上，从而进行其他相关操作。
+
+##### Session
+
+加密版的cookie。有多种存储方式，Redis etc。防止恶意用户修改cookie操作相关服务。
+
+操作session方式：
+
+1，保存到服务器磁盘上，用户保存一个 session ID，实际上是一个文件名，请求后到服务器上找文件，用户无法串改，安全高，用户没有任何方法修改，对分布式不友好，多台服务器登陆状态成问题；
+
+2，分布式负载均衡发送会话到不同的服务器上，勾上会话保持后，设置一个 cookie 后，之后用户永远只能访问指定的服务器。但这过于依赖会话保持。新一种方式，cookie 存在于用户机器上，用户发送请求时带上，任何一台服务器解密后进行服务，有一定安全性，不绝对。
+
+3，利用 Redis，之前的把 session ID 和 文件名绑定放到同一个服务器上存在问题，发送请求时，带上 cookie 中的 value 值（相当于键） 去服务器的 redis 中找 userID。
+
+汇总，仅仅是一个 userID 存放问题。
+
+#### 改动文件
+
+api/main.go
+
+api/user.go
+
+middleware/auth.go
+
+middleware/session.go
+
+model/user.go
+
+serializar/user.go
+
+server/router.go
+
+service/user_login_service.go
+
+service/user_register_service.go

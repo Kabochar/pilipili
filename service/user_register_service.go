@@ -22,6 +22,7 @@ func (service *UserRegisterService) Valid() *serializer.Response {
 		}
 	}
 
+	// 不允许昵称相同
 	count := 0
 	model.DB.Model(&model.User{}).Where("nickname = ?", service.Nickname).Count(&count)
 	if count > 0 {
@@ -48,7 +49,7 @@ func (service *UserRegisterService) Register() (model.User, *serializer.Response
 	user := model.User{
 		Nickname: service.Nickname,
 		UserName: service.UserName,
-		Status:   model.Active,
+		Status:   model.Active, // 状态保存用户的操作权限
 	}
 
 	// 表单验证

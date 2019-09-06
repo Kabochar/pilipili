@@ -14,7 +14,7 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 
 	// 中间件, 顺序不能改
-	r.Use(middleware.Session(os.Getenv("SESSION_SECRET")))
+	r.Use(middleware.Session(os.Getenv("SESSION_SECRET"))) // 这里干嘛，加密 session，创建一个唯一性的 session
 	r.Use(middleware.Cors())        // 跨域问题
 	r.Use(middleware.CurrentUser()) // 获取当前用户
 
@@ -31,7 +31,7 @@ func NewRouter() *gin.Engine {
 
 		// 需要登录保护的
 		auth := v1.Group("/")
-		auth.Use(middleware.AuthRequired())
+		auth.Use(middleware.AuthRequired()) // 身份认证
 		{
 			// User Routing
 			auth.GET("user/me", api.UserMe)

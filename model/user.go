@@ -35,6 +35,7 @@ func GetUser(ID interface{}) (User, error) {
 
 // SetPassword 设置密码
 func (user *User) SetPassword(password string) error {
+	// 这里使用 bcrypt 加密，套 PassWordCost 12 层，最大程度加大攻破成本
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), PassWordCost)
 	if err != nil {
 		return err
