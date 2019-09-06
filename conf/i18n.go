@@ -10,6 +10,7 @@ import (
 // Dictionary 字典
 var Dictionary *map[interface{}]interface{}
 
+// LoadLocales 读取国际化文件
 func LoadLocales(path string) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -28,10 +29,9 @@ func LoadLocales(path string) error {
 }
 
 // T 翻译
-
-// T 翻译
 func T(key string) string {
 	dic := *Dictionary
+
 	keys := strings.Split(key, ".")
 	for index, path := range keys {
 		// 如果到达了最后一层，寻找目标翻译

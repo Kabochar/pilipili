@@ -18,7 +18,7 @@ func Run(job func() error) {
 	err := job()
 	to := time.Now().UnixNano()
 	jobName := runtime.FuncForPC(reflect.ValueOf(job).Pointer()).Name()
-	if err != n{
+	if err != nil {
 		log.Printf("%s error: %dms\n", jobName, (to-from)/int64(time.Millisecond))
 	} else {
 		log.Printf("%s success: %dms\n", jobName, (to-from)/int64(time.Millisecond))

@@ -16,6 +16,11 @@ func Init() {
 	// 从本地读取环境变量
 	godotenv.Load()
 
+	// 读取翻译文件
+	if err := LoadLocales("conf/locales/zh-cn.yaml"); err != nil {
+		panic(err)
+	}
+
 	// 设置日志级别
 	util.BuildLogger(os.Getenv("LOG_LEVEL"))
 

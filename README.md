@@ -137,5 +137,16 @@ modified:   tasks/rank.go
 
 
 
+### V0.4 修正 BUG: fixed & format project
 
+#### 改动文件
 
+modified:   conf/conf.go，配置文件加载翻译文件补上
+
+modified:   conf/i18n.go，重命名 Dictionary
+
+modified:   server/router.go，路由，用户登陆保护的 auth := v1.Group("/")，加上路径
+
+modified:   tasks/cron.go，定时任务的 error 条件判定缺失
+
+modified:   tasks/rank.go
