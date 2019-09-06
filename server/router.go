@@ -15,7 +15,7 @@ func NewRouter() *gin.Engine {
 
 	// 中间件, 顺序不能改
 	r.Use(middleware.Session(os.Getenv("SESSION_SECRET")))
-	r.Use(middleware.Cors()) // 跨域问题
+	r.Use(middleware.Cors())        // 跨域问题
 	r.Use(middleware.CurrentUser()) // 获取当前用户
 
 	// 路由
@@ -44,6 +44,9 @@ func NewRouter() *gin.Engine {
 		v1.GET("videos", api.ListVideo)
 		v1.PUT("video/:id", api.UpdateVideo)
 		v1.DELETE("video/:id", api.DeleteVideo)
+
+		// 排行榜
+		v1.GET("rank/daily", api.DailyRank)
 	}
 
 	return r

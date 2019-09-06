@@ -6,7 +6,7 @@ import (
 )
 
 // DeleteVideoService 删除投稿的服务
-type DeleteVideoService struct {}
+type DeleteVideoService struct{}
 
 // Delete 删除视频
 func (service *DeleteVideoService) Delete(id string) serializer.Response {

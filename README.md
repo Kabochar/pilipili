@@ -58,14 +58,84 @@
 #### 改动文件
 
 modified:   README.md
+
 new file:   api/video.go
+
 modified:   conf/i18n.go
+
 modified:   model/migration.go
+
 new file:   model/video.go
+
 new file:   serializer/video.go
+
 modified:   server/router.go
+
 new file:   service/create_video_service.go
+
 new file:   service/delete_video_service.go
+
 new file:   service/list_video_service.go
+
 new file:   service/show_video_service.go
+
 new file:   service/update_video_service.go
+
+
+
+### V0.3 热度排行榜
+
+#### 相关接口
+
+热度查询接口：GET /api/v1/rank/daily
+
+#### 相关知识
+
+##### Redis
+
+获取某一视频打开量：GET "view:video:[ id ]"
+
+播放量+1：INCR "view:video:[ id ]"，给 view:video:[ id ] 给 这个内容+1
+
+删除某个键，删除数据：DEL "rank:daily"，删除 rank:daily 数据
+
+清空 redis 所有数据：FLUSHALL，清空 redis 数据
+
+排行榜加分：ZINCRBY “rank:daily” 1 “10” ，给 rank:daily 10 号视频 +1
+
+获取排行：ZREVRANGE “rank:daily” 0 9 ，获取排行前 10 的内容
+
+#### 改动文件
+
+new file:   api/rank.go
+
+new file:   cache/keys.go
+
+new file:   cache/main.go
+
+new file:   service/daily_rank_service.go
+
+new file:   tasks/cron.go
+
+new file:   tasks/rank.go
+
+modified:   conf/conf.go
+
+modified:   model/video.go
+
+modified:   serializer/video.go
+
+modified:   server/router.go
+
+modified:   service/daily_rank_service.go
+
+modified:   service/show_video_service.go
+
+modified:   tasks/cron.go
+
+modified:   tasks/rank.go
+
+
+
+
+

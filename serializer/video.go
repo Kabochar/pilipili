@@ -2,7 +2,6 @@ package serializer
 
 import "pilipili/model"
 
-
 // Video 视频序列化器
 type Video struct {
 	ID        uint   `json:"id"`
@@ -10,6 +9,7 @@ type Video struct {
 	Info      string `json:"info"`
 	URL       string `json:"url"`
 	Avatar    string `json:"avatar"`
+	View      uint64 `json:"view"`
 	CreatedAt int64  `json:"created_at"`
 }
 
@@ -21,6 +21,7 @@ func BuildVideo(item model.Video) Video {
 		Info:      item.Info,
 		URL:       item.URL,
 		Avatar:    "",
+		View:      item.View(),
 		CreatedAt: item.CreatedAt.Unix(),
 	}
 }
