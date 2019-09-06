@@ -206,3 +206,23 @@ server/router.go
 service/user_login_service.go
 
 service/user_register_service.go
+
+
+
+### V0.6 翻页操作
+
+#### 相关接口
+
+无更新
+
+#### 相关知识
+
+翻页操作需要封装 数据内容 and 数据总个数 给前端操作
+
+#### 改动文件
+
+modified:   README.md
+
+modified:   serializer/common.go
+
+modified:   service/list_video_service.go
