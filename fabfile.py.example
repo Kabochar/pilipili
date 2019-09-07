@@ -1,0 +1,20 @@
+from fabric import Connection, task
+
+# 任务
+@task
+def deploy(c):
+    with Connection('root@[IP ADDRESS]') as c:
+        c.run("rm -rf pilipili")
+        # pty 显示
+        c.run("git clone https://github.com/pumkinpie/pilipili.git", pty=True)
+        c.put("docker-compose.yml", "pilipili/docker-compose.yml")
+        # docker-compose 相关操作
+        c.run("cd pilipili && docker-compose build && docker-compose rm -fsv && docker-compose up --build -d", pty=True)
+        c.run("sleep 15 && docker logs -f pili-api")
+
+# 参考资料
+# doc http://docs.fabfile.org/en/2.5/getting-started.html
+# apt install python-pip
+# pip install fabric -i http://mirrors.aliyun.com/pypi/simple/
+# 启动任务
+# fab deploy

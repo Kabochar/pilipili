@@ -272,3 +272,29 @@ modified:   server/router.go
 
 new file:   service/upload_token_service.go
 
+
+
+### V0.8 相关部署文件
+
+#### 说明
+
+增加文件：Dockerfile，docker-compose.yml.example，fabfile.py.example
+
+Dockerfile：Docker部署文件。编译打包文件；
+
+docker-compose.yml.example：docker 部署指令，项目环境的配置，mysql，redis，api 服务 etc；
+
+fabfile.py.example：自动化部署。注意，相关服务不是跑在本地的，是跑在目标服务器上的；
+
+#### 改动文件
+
+new file:   .dockerignore
+
+new file:   Dockerfile
+
+modified:   README.md
+
+new file:   docker-compose.yml.example
+
+new file:   fabfile.py.example
+
