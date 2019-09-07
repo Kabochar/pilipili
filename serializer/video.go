@@ -1,6 +1,8 @@
 package serializer
 
-import "pilipili/model"
+import (
+	"pilipili/model"
+)
 
 // Video 视频序列化器
 type Video struct {
@@ -20,7 +22,7 @@ func BuildVideo(item model.Video) Video {
 		Title:     item.Title,
 		Info:      item.Info,
 		URL:       item.URL,
-		Avatar:    "",
+		Avatar:    "", // item.AvatarURL() 请求封面，这里使用默认封面。
 		View:      item.View(),
 		CreatedAt: item.CreatedAt.Unix(),
 	}

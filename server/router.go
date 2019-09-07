@@ -15,8 +15,8 @@ func NewRouter() *gin.Engine {
 
 	// 中间件, 顺序不能改
 	r.Use(middleware.Session(os.Getenv("SESSION_SECRET"))) // 这里干嘛，加密 session，创建一个唯一性的 session
-	r.Use(middleware.Cors())        // 跨域问题
-	r.Use(middleware.CurrentUser()) // 获取当前用户
+	r.Use(middleware.Cors())                               // 跨域问题
+	r.Use(middleware.CurrentUser())                        // 获取当前用户
 
 	// 路由
 	v1 := r.Group("/api/v1")
@@ -47,6 +47,9 @@ func NewRouter() *gin.Engine {
 
 		// 排行榜
 		v1.GET("rank/daily", api.DailyRank)
+
+		// 文件上传
+		v1.POST("upload/token", api.UploadToken)
 	}
 
 	return r

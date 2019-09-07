@@ -226,3 +226,49 @@ modified:   README.md
 modified:   serializer/common.go
 
 modified:   service/list_video_service.go
+
+
+
+### V0.7 OSS 文件上传
+
+#### 相关接口
+
+-   文件上传：POST /api/v1/upload/token
+    -   测试：JSON 请求 {"filename":"new.png"}
+
+#### 相关知识
+
+使用 OSS 文件存储方式进行。不经过后端服务器。
+
+需要 OSS_ACCESS_KEY，使用 子账户 操作，需要给用户 OSS 操作的相关权限。
+
+在前后端分离的情况下，需要保存文件的存储地址，仓库不变，端点不变。（为什么？保证分布式进行，多台服务器可以随意直接访问）
+
+为什么需要使用 OSS 直传？
+
+1，带宽充足，降低了服务器消耗。
+
+2，操作分布式，记录 文件地址后，可以直接访问文件，不用经过后端服务器。
+
+##### 上传流程
+
+简述：首先获取钥匙，探测可操作请求，上传文件，GET 回显内容。
+
+这里会有三个请求，顺序进行，详情如下：
+
+-   POST请求：先找阿里云拿 token，获取一个签名or钥匙，返回给一个上传的钥匙。这里把未来上传的地址 和 下载的地址都预签名好。（为什么不用 GET？避免跨域攻击）
+-   OPTIONS请求：上传不通过后端服务器，直传阿里云，这里涉及一个跨域问题，前端会发出一个 OPTIONS 请求，从 Response **探测** 了解能进行的操作，请求类型，请求域名 etc。
+-   PUT 请求：然后，再发送一个 PUT 请求，把图片上传上去。
+
+#### 改动文件
+
+new file:   api/upload.go
+
+modified:   model/video.go
+
+modified:   serializer/video.go
+
+modified:   server/router.go
+
+new file:   service/upload_token_service.go
+
