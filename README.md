@@ -2,7 +2,18 @@
 
 一个简单纯粹的在线点播案例
 
+## 快速启动
 
+设置淘宝的软件源，并开启 GO111MODULE，PowerShell 操作以下指令：
+
+```
+$env:GOPROXY = 'https://mirrors.aliyun.com/goproxy/'
+$env:GO111MODULE = 'on'
+
+go run main.go
+```
+
+一起进入 Golang 的世界吧！
 
 ## 项目相关(简单说明)
 
@@ -24,6 +35,8 @@
 
 ### V0.1 基础模型搭建
 
+#### 操作
+
 基础内容创建
 
 #### 模块划分层面
@@ -34,7 +47,7 @@
 -   视图
     -   序列化器 serializer
 
-#### 
+
 
 ### V0.2 视频系列模块
 
@@ -57,29 +70,20 @@
 
 #### 改动文件
 
+```
 modified:   README.md
-
 new file:   api/video.go
-
 modified:   conf/i18n.go
-
 modified:   model/migration.go
-
 new file:   model/video.go
-
 new file:   serializer/video.go
-
 modified:   server/router.go
-
 new file:   service/create_video_service.go
-
 new file:   service/delete_video_service.go
-
 new file:   service/list_video_service.go
-
 new file:   service/show_video_service.go
-
 new file:   service/update_video_service.go
+```
 
 
 
@@ -107,33 +111,22 @@ new file:   service/update_video_service.go
 
 #### 改动文件
 
+```
 new file:   api/rank.go
-
 new file:   cache/keys.go
-
 new file:   cache/main.go
-
 new file:   service/daily_rank_service.go
-
 new file:   tasks/cron.go
-
 new file:   tasks/rank.go
-
 modified:   conf/conf.go
-
 modified:   model/video.go
-
 modified:   serializer/video.go
-
 modified:   server/router.go
-
 modified:   service/daily_rank_service.go
-
 modified:   service/show_video_service.go
-
 modified:   tasks/cron.go
-
 modified:   tasks/rank.go
+```
 
 
 
@@ -141,15 +134,13 @@ modified:   tasks/rank.go
 
 #### 改动文件
 
+```
 modified:   conf/conf.go，配置文件加载翻译文件补上
-
 modified:   conf/i18n.go，重命名 Dictionary
-
 modified:   server/router.go，路由，用户登陆保护的 auth := v1.Group("/")，加上路径
-
 modified:   tasks/cron.go，定时任务的 error 条件判定缺失
-
 modified:   tasks/rank.go
+```
 
 
 
@@ -189,23 +180,17 @@ POINTS: 加密问题，session 处理问题。
 
 #### 改动文件
 
+```
 api/main.go
-
 api/user.go
-
 middleware/auth.go
-
 middleware/session.go
-
 model/user.go
-
 serializar/user.go
-
 server/router.go
-
 service/user_login_service.go
-
 service/user_register_service.go
+```
 
 
 
@@ -221,11 +206,11 @@ service/user_register_service.go
 
 #### 改动文件
 
+```
 modified:   README.md
-
 modified:   serializer/common.go
-
 modified:   service/list_video_service.go
+```
 
 
 
@@ -262,15 +247,13 @@ modified:   service/list_video_service.go
 
 #### 改动文件
 
+````
 new file:   api/upload.go
-
 modified:   model/video.go
-
 modified:   serializer/video.go
-
 modified:   server/router.go
-
 new file:   service/upload_token_service.go
+````
 
 
 
@@ -288,13 +271,10 @@ fabfile.py.example：自动化部署。注意，相关服务不是跑在本地�
 
 #### 改动文件
 
+```
 new file:   .dockerignore
-
 new file:   Dockerfile
-
 modified:   README.md
-
 new file:   docker-compose.yml.example
-
 new file:   fabfile.py.example
-
+```
