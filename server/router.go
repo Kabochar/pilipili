@@ -2,11 +2,14 @@ package server
 
 import (
 	"os"
+	"time"
 
-	"github.com/gin-gonic/gin"
 	"pilipili/api"
 	"pilipili/middleware"
 	"pilipili/util"
+
+	cache "github.com/chenyahui/gin-cache"
+	"github.com/gin-gonic/gin"
 )
 
 // NewRouter 路由配置
@@ -21,6 +24,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())                               // 跨域问题
 	r.Use(middleware.CurrentUser())                        // 获取当前用户
 	r.Use(middleware.RequestIDMiddleware())                // 请求id
+	middleware.BuildMiddleMemoryCache()                    // 初始化缓存中间件
 
 	// 配置可信任的代理，配置为 nil，默认都允许通过
 	// 参考资料：https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
@@ -52,13 +56,13 @@ func NewRouter() *gin.Engine {
 
 		// 视频相关服务
 		v1.POST("videos", api.CreateVideo)
-		v1.GET("video/:id", api.ShowVideo)
-		v1.GET("videos", api.ListVideo)
+		v1.GET("video/:id", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.ShowVideo)
+		v1.GET("videos", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.ListVideo)
 		v1.PUT("video/:id", api.UpdateVideo)
 		v1.DELETE("video/:id", api.DeleteVideo)
 
 		// 排行榜
-		v1.GET("rank/daily", api.DailyRank)
+		v1.GET("rank/daily", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.DailyRank)
 
 		// 文件上传
 		v1.POST("upload/token", api.UploadToken)

@@ -11,6 +11,10 @@ type ListVideoService struct {
 	Start int `form:"start"` // 数据起始位置
 }
 
+const (
+	_DEFUALT_GET_LIST_LIMIT = 6 // 默认的获取条数
+)
+
 // List 视频列表
 func (service *ListVideoService) List() serializer.Response {
 	var videos []model.Video
@@ -18,7 +22,7 @@ func (service *ListVideoService) List() serializer.Response {
 
 	// 设置数据个数默认值
 	if service.Limit == 0 {
-		service.Limit = 6
+		service.Limit = _DEFUALT_GET_LIST_LIMIT
 	}
 
 	// 符合条件 数据总数

@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.0.2+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
+	github.com/chenyahui/gin-cache v1.7.0
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-contrib/sessions v0.0.1
 	github.com/gin-gonic/gin v1.8.0
