@@ -3,14 +3,16 @@ package server
 import (
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"pilipili/api"
 	"pilipili/middleware"
-
-	"github.com/gin-gonic/gin"
+	"pilipili/util"
 )
 
 // NewRouter 路由配置
 func NewRouter() *gin.Engine {
+	gin.DisableConsoleColor()
+
 	r := gin.Default()
 
 	// 中间件, 顺序不能改
@@ -18,9 +20,17 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())                               // 跨域问题
 	r.Use(middleware.CurrentUser())                        // 获取当前用户
 
+	// 配置可信任的代理，配置为 nil，默认都允许通过
+	// 参考资料：https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
+	err := r.SetTrustedProxies(nil)
+	if err != nil {
+		util.Log().Error("set trusted proxies ERROR [%v]\n", err)
+	}
+
 	// 路由
 	v1 := r.Group("/api/v1")
 	{
+		// 服务存活判断
 		v1.POST("ping", api.Ping)
 
 		// 用户登录
