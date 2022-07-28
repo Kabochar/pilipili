@@ -7,18 +7,29 @@ import (
 )
 
 // 请求id
+// 参考链接：https://mp.weixin.qq.com/s/M2jNnLkYaearwyRERnt0tA
 func RequestIDMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		reqId := ctx.Request.Header.Get("X-Request-Id")
-		if reqId == "" {
-			reqId = util.RandStringRunes(15)
-			ctx.Request.Header.Set("X-Request-Id", reqId)
+		traceID := ctx.Request.Header.Get("X-Trace-Id")
+		if traceID == "" {
+			traceID = util.RandStringRunes(15)
+			ctx.Request.Header.Set("X-Trace-Id", traceID)
 		}
-		// 写入到service的log对象上
-		util.Log().SetLogField(reqId)
+		spanID := ctx.Request.Header.Get("X-Span-Id")
+		if spanID == "" {
+			spanID = getSpanID(ctx.RemoteIP())
+			ctx.Request.Header.Set("X-Span-Id", spanID)
+		}
 
 		// 写入响应
-		ctx.Header("X-Request-Id", reqId)
+		ctx.Header("X-Trace-Id", traceID)
+		ctx.Header("X-Span-Id", spanID)
 		ctx.Next()
 	}
+}
+
+// 根据客户端ip生成唯一
+func getSpanID(ip string) string {
+	result := util.MD5(ip)
+	return result[15:]
 }

@@ -1,6 +1,9 @@
 package util
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"math/rand"
 	"time"
 )
@@ -15,4 +18,12 @@ func RandStringRunes(n int) string {
 		b[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 	return string(b)
+}
+
+// copied from https://www.jianshu.com/p/58dcbf490ef3
+func MD5(str string) string {
+	w := md5.New()
+	io.WriteString(w, str)
+	md5str := fmt.Sprintf("%x", w.Sum(nil))
+	return md5str
 }

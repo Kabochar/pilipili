@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"os"
 	"time"
 )
@@ -22,12 +23,19 @@ var logger *Logger
 // Logger 日志
 type Logger struct {
 	level   int
-	trackID string
+	traceID string // trace 串联出一个业务逻辑的所有业务日志
+	spanID  string // span 串联出在单个服务里的业务日志
 }
 
 // Println 打印
 func (ll *Logger) Println(msg string) {
-	fmt.Printf("[%s %d %s] %s\n", time.Now().Format("2006-01-02 15:04:05.000"), os.Getpid(), ll.trackID, msg)
+	fmt.Printf("[%s %d %s %s] %s\n",
+		time.Now().Format("2006-01-02 15:04:05.000"),
+		os.Getpid(),
+		ll.traceID,
+		ll.spanID,
+		msg,
+	)
 }
 
 // Panic 极端错误
@@ -95,9 +103,11 @@ func BuildLogger(level string) {
 	logger = &l
 }
 
-// 由中间件传入具体的trace id
-func (ll *Logger) SetLogField(reqID string) {
-	ll.trackID = reqID[len(reqID)-10:]
+// GetTraceId 由中间件传入具体的trace id
+func (ll *Logger) GetTraceId(ctx *gin.Context) *Logger {
+	ll.traceID = ctx.GetHeader("X-Trace-Id")
+	ll.spanID = ctx.GetHeader("X-Span-Id")
+	return ll
 }
 
 // Log 返回日志对象
