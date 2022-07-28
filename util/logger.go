@@ -21,12 +21,13 @@ var logger *Logger
 
 // Logger 日志
 type Logger struct {
-	level int
+	level   int
+	trackID string
 }
 
 // Println 打印
 func (ll *Logger) Println(msg string) {
-	fmt.Printf("[%s %d] %s\n", time.Now().Format("2006-01-02 15:04:05.000"), os.Getpid(), msg)
+	fmt.Printf("[%s %d %s] %s\n", time.Now().Format("2006-01-02 15:04:05.000"), os.Getpid(), ll.trackID, msg)
 }
 
 // Panic 极端错误
@@ -92,6 +93,11 @@ func BuildLogger(level string) {
 		level: intLevel,
 	}
 	logger = &l
+}
+
+// 由中间件传入具体的trace id
+func (ll *Logger) SetLogField(reqID string) {
+	ll.trackID = reqID[len(reqID)-10:]
 }
 
 // Log 返回日志对象

@@ -11,6 +11,7 @@ import (
 
 // NewRouter 路由配置
 func NewRouter() *gin.Engine {
+	// 禁用彩色打印
 	gin.DisableConsoleColor()
 
 	r := gin.Default()
@@ -19,6 +20,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Session(os.Getenv("SESSION_SECRET"))) // 这里干嘛，加密 session，创建一个唯一性的 session
 	r.Use(middleware.Cors())                               // 跨域问题
 	r.Use(middleware.CurrentUser())                        // 获取当前用户
+	r.Use(middleware.RequestIDMiddleware())                // 请求id
 
 	// 配置可信任的代理，配置为 nil，默认都允许通过
 	// 参考资料：https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
