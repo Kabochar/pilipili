@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
+	"gopkg.in/go-playground/validator.v8"
 	"pilipili/conf"
 	"pilipili/model"
 	"pilipili/serializer"
-
-	"github.com/gin-gonic/gin"
-	validator "gopkg.in/go-playground/validator.v8"
 )
 
 // Ping 状态检查页面

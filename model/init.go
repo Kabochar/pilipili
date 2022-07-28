@@ -18,7 +18,7 @@ func Database(connString string) {
 	db.LogMode(true)
 	// Error
 	if err != nil {
-		util.Log().Panic("连接数据库不成功", err)
+		util.Log().Panic("connect mysql client ERROR %v", err)
 	}
 	// 设置连接池
 	// 空闲
