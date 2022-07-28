@@ -3,6 +3,8 @@ package service
 import (
 	"pilipili/model"
 	"pilipili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // ListVideoService 视频列表服务
@@ -16,7 +18,7 @@ const (
 )
 
 // List 视频列表
-func (service *ListVideoService) List() serializer.Response {
+func (service *ListVideoService) List(c *gin.Context) serializer.Response {
 	var videos []model.Video
 	total := 0
 

@@ -3,15 +3,17 @@ package service
 import (
 	"pilipili/model"
 	"pilipili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // DeleteVideoService 删除投稿的服务
 type DeleteVideoService struct{}
 
 // Delete 删除视频
-func (service *DeleteVideoService) Delete(id string) serializer.Response {
+func (service *DeleteVideoService) Delete(c *gin.Context) serializer.Response {
 	var video model.Video
-	err := model.DB.First(&video, id).Error
+	err := model.DB.First(&video, c.Param("id")).Error
 	if err != nil {
 		return serializer.Response{
 			Status: 404,

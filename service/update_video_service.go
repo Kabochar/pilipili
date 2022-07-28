@@ -3,6 +3,8 @@ package service
 import (
 	"pilipili/model"
 	"pilipili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // UpdateVideoService 更新视频的服务
@@ -12,9 +14,9 @@ type UpdateVideoService struct {
 }
 
 // Update 更新视频
-func (service *UpdateVideoService) Update(id string) serializer.Response {
+func (service *UpdateVideoService) Update(c *gin.Context) serializer.Response {
 	var video model.Video
-	err := model.DB.First(&video, id).Error
+	err := model.DB.First(&video, c.Param("id")).Error
 	if err != nil {
 		return serializer.Response{
 			Status: 404,

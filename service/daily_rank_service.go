@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"strings"
 
 	"pilipili/cache"
@@ -14,7 +15,7 @@ type DailyRankService struct {
 }
 
 // Get 获取排行
-func (service *DailyRankService) Get() serializer.Response {
+func (service *DailyRankService) Get(c *gin.Context) serializer.Response {
 	var videos []model.Video
 
 	// 从redis读取点击前十的视频

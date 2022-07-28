@@ -3,6 +3,8 @@ package service
 import (
 	"pilipili/model"
 	"pilipili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // ShowVideoService 投稿详情的服务
@@ -10,9 +12,9 @@ type ShowVideoService struct {
 }
 
 // Show 创建视频
-func (service *ShowVideoService) Show(id string) serializer.Response {
+func (service *ShowVideoService) Show(c *gin.Context) serializer.Response {
 	var video model.Video
-	err := model.DB.First(&video, id).Error
+	err := model.DB.First(&video, c.Param("id")).Error
 	if err != nil {
 		return serializer.Response{
 			Status: 404,

@@ -3,6 +3,8 @@ package service
 import (
 	"pilipili/model"
 	"pilipili/serializer"
+
+	"github.com/gin-gonic/gin"
 )
 
 // CreateVideoService 视频投稿的服务
@@ -15,7 +17,7 @@ type CreateVideoService struct {
 }
 
 // Create 创建视频
-func (service *CreateVideoService) Create() serializer.Response {
+func (service *CreateVideoService) Create(c *gin.Context) serializer.Response {
 	video := model.Video{
 		Title:  service.Title,
 		Info:   service.Info,
