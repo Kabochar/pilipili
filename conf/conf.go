@@ -1,8 +1,10 @@
 package conf
 
 import (
+	"io/ioutil"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"pilipili/cache"
 	"pilipili/model"
 	"pilipili/tasks"
@@ -23,6 +25,12 @@ func Init() {
 
 	// 设置日志级别
 	util.BuildLogger(os.Getenv("LOG_LEVEL"))
+
+	// 配置gin 日志
+	gin.SetMode(os.Getenv("GIN_MODE"))
+	if os.Getenv("TEST_MODE") == "benchmark" { // 压测模式下，暂时屏蔽日志以测试出理论最优的QPS
+		gin.DefaultWriter = ioutil.Discard
+	}
 
 	// 连接数据库
 	model.Database(os.Getenv("MYSQL_DSN"))
