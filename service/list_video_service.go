@@ -20,7 +20,7 @@ const (
 // List 视频列表
 func (service *ListVideoService) List(c *gin.Context) serializer.Response {
 	var videos []model.Video
-	total := 0
+	total := int64(0)
 
 	// 设置数据个数默认值
 	if service.Limit == 0 {

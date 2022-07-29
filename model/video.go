@@ -7,7 +7,7 @@ import (
 	"pilipili/cache"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Video 视频模型
