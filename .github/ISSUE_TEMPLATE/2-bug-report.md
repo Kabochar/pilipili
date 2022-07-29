@@ -7,22 +7,18 @@ about: "If something isn't working as expected 🤔."
 
 How's the bug happen?
 
-write here
 
 ## Version & Environment
 
-What's your golang version？
+development system？
 
-write here
 
-What's your system?
+project version？
 
-write here
 
 ## Expection
 
-write here
+
 
 ## Actual results (or Errors)
 
-write here

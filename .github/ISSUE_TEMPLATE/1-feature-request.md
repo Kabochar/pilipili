@@ -3,22 +3,16 @@ name: 'Feature request 🚀'
 about: 'I have some suggestion!'
 ---
 
-# Feature request 🚀
+# [Feature]: feature request 🚀
 
 ### Expected
 
 - No breaking changes
 
-### Examples
+### Description
 
-```golang
-fmt.Printlm("Hello World!")
-```
+describe your expected feature.
 
-### Programme
+### Resources 
 
-your hope feature...
-
-### Others
-
-others thinking...
+some other open sources implement recommend？
