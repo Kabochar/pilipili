@@ -4,15 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
-	"gopkg.in/go-playground/validator.v8"
 	"pilipili/conf"
 	"pilipili/model"
 	"pilipili/serializer"
+	"pilipili/util"
+
+	"github.com/gin-gonic/gin"
+	validator "gopkg.in/go-playground/validator.v8"
 )
 
 // Ping 状态检查页面
 func Ping(c *gin.Context) {
+	util.Log().GetTraceId(c).Println("HelloWorld")
 	c.JSON(200, serializer.Response{
 		Status: 0,
 		Msg:    "Pong",

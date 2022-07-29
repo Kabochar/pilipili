@@ -2,9 +2,10 @@ package util
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 	LevelWarning
 	// LevelInformational 提示
 	LevelInformational
-	// LevelDebug 除错
+	// LevelDebug 出错
 	LevelDebug
 )
 

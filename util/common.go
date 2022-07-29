@@ -20,7 +20,7 @@ func RandStringRunes(n int) string {
 	return string(b)
 }
 
-// copied from https://www.jianshu.com/p/58dcbf490ef3
+// MD5 copied from https://www.jianshu.com/p/58dcbf490ef3
 func MD5(str string) string {
 	w := md5.New()
 	io.WriteString(w, str)
