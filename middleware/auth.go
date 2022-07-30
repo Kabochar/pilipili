@@ -13,12 +13,17 @@ func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		uid := session.Get("user_id")
-		if uid != nil {
-			user, err := model.GetUser(uid)
-			if err == nil {
-				c.Set("user", &user)
-			}
+		if uid == nil {
+			c.Next()
+			return
 		}
+
+		user, err := model.GetUser(uid)
+		if err != nil {
+			c.Next()
+			return
+		}
+		c.Set("user", &user)
 		c.Next()
 	}
 }
@@ -26,17 +31,16 @@ func CurrentUser() gin.HandlerFunc {
 // AuthRequired 需要登录
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if user, _ := c.Get("user"); user != nil {
-			if _, ok := user.(*model.User); ok {
-				c.Next()
-				return
-			}
+		user, _ := c.Get("user")
+		if user == nil {
+			c.JSON(200, serializer.Response{
+				Status: 401,
+				Msg:    "需要登录",
+			})
+			c.Abort()
 		}
-
-		c.JSON(200, serializer.Response{
-			Status: 401,
-			Msg:    "需要登录",
-		})
-		c.Abort()
+		if _, ok := user.(*model.User); ok {
+			c.Next()
+		}
 	}
 }
