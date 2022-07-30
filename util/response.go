@@ -1,4 +1,4 @@
-package middleware
+package util
 
 import (
 	"time"
@@ -12,11 +12,11 @@ const (
 )
 
 var (
-	// 缓存中间件对象
-	MemoryCache *persist.MemoryStore = nil
+	// 响应缓存中间件对象
+	RespMemCache *persist.MemoryStore = nil
 )
 
 // 构建缓存中间件
-func BuildMiddleMemoryCache() {
-	MemoryCache = persist.NewMemoryStore(_DEFUALT_CACHE_RESPONSE_EXPIRE_TIME)
+func BuildResponseMemoryCache() {
+	RespMemCache = persist.NewMemoryStore(_DEFUALT_CACHE_RESPONSE_EXPIRE_TIME)
 }

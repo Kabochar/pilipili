@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"pilipili/util"
 	"syscall"
 	"time"
 
 	"pilipili/conf"
 	"pilipili/server"
+	"pilipili/util"
 )
 
 func main() {

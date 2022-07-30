@@ -25,7 +25,6 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())                               // 跨域问题
 	r.Use(middleware.CurrentUser())                        // 获取当前用户
 	r.Use(middleware.RequestIDMiddleware())                // 请求id
-	middleware.BuildMiddleMemoryCache()                    // 初始化缓存中间件
 	pprof.Register(r)                                      // pprof 中间件
 	r.Use(middleware.BlacklistMiddleware())                // 加载黑名单
 
@@ -59,13 +58,13 @@ func NewRouter() *gin.Engine {
 
 		// 视频相关服务
 		v1.POST("videos", api.CreateVideo)
-		v1.GET("video/:id", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.ShowVideo)
-		v1.GET("videos", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.ListVideo)
+		v1.GET("video/:id", cache.CacheByRequestPath(util.RespMemCache, time.Second), api.ShowVideo)
+		v1.GET("videos", cache.CacheByRequestPath(util.RespMemCache, time.Second), api.ListVideo)
 		v1.PUT("video/:id", api.UpdateVideo)
 		v1.DELETE("video/:id", api.DeleteVideo)
 
 		// 排行榜
-		v1.GET("rank/daily", cache.CacheByRequestPath(middleware.MemoryCache, time.Second), api.DailyRank)
+		v1.GET("rank/daily", cache.CacheByRequestPath(util.RespMemCache, time.Second), api.DailyRank)
 
 		// 文件上传
 		v1.POST("upload/token", api.UploadToken)

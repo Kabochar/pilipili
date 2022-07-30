@@ -32,13 +32,9 @@ func Init() {
 		gin.DefaultWriter = ioutil.Discard
 	}
 
-	// 连接数据库
-	model.Database(os.Getenv("MYSQL_DSN"))
-	cache.Redis()
-
-	// 启动定时任务
-	tasks.CronJob()
-
-	// 加载黑名单
-	util.WatchBlackList()
+	model.Database(os.Getenv("MYSQL_DSN")) // 连接数据库
+	cache.Redis()                          // 连接Redis
+	tasks.CronJob()                        // 启动定时任务
+	util.WatchBlackList()                  // 加载黑名单
+	util.BuildResponseMemoryCache()        // 初始化响应中间件对象
 }
