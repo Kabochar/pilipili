@@ -38,4 +38,7 @@ func Init() {
 
 	// 启动定时任务
 	tasks.CronJob()
+
+	// 加载黑名单
+	util.WatchBlackList()
 }

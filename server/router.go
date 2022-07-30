@@ -27,6 +27,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.RequestIDMiddleware())                // 请求id
 	middleware.BuildMiddleMemoryCache()                    // 初始化缓存中间件
 	pprof.Register(r)                                      // pprof 中间件
+	r.Use(middleware.BlacklistMiddleware())                // 加载黑名单
 
 	// 配置可信任的代理，配置为 nil，默认都允许通过
 	// 参考资料：https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
