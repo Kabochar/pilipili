@@ -1,13 +1,10 @@
 package main
 
 import (
-	"context"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	"pilipili/conf"
 	"pilipili/server"
 	"pilipili/util"
@@ -19,40 +16,33 @@ func main() {
 
 	// 装载路由
 	r := server.NewRouter()
-	bind := os.Getenv("API_BIND")
 
-	srv := &http.Server{
-		Addr:    bind,
-		Handler: r,
+	// 获取bind地址和当前服务名称
+	var addr string = os.Getenv("API_BIND")
+	var svcName string = os.Getenv("SERVICE_NAME")
+
+	// 创建/导入监听器
+	ln, err := util.CreateOrImportListener(svcName, addr)
+	if err != nil {
+		fmt.Printf("Unable to create or import a listener: %v.\n", err)
+		return
 	}
 
+	srv := &http.Server{
+		Addr:    addr,
+		Handler: r,
+	}
 	go func() {
 		// service connections
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
 			util.Log().Panic("listen: %s\n", err)
 		}
 	}()
 
-	// graceful shutdown implement，copied from gin office docs
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 5 seconds.
-	quit := make(chan os.Signal)
-	// kill (no param) default send syscanll.SIGTERM
-	// kill -2 is syscall.SIGINT
-	// kill -9 is syscall. SIGKILL but can"t be catch, so don't need add it
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	util.Log().Println("Shutdown Server ...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		util.Log().Panic("Server Shutdown:", err)
+	// 接收退出信号
+	err = util.WaitForSignals(svcName, addr, ln, srv)
+	if err != nil {
+		util.Log().Error("Exiting: %v\n", err)
+		return
 	}
-	// catching ctx.Done(). timeout of 5 seconds.
-	select {
-	case <-ctx.Done():
-		util.Log().Println("timeout of 2 seconds.")
-	}
-	util.Log().Println("Server exiting")
 }
