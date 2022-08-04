@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
+	"time"
+
 	"pilipili/conf"
 	"pilipili/server"
 	"pilipili/util"
@@ -28,9 +29,11 @@ func main() {
 		return
 	}
 
+	// reference：https://ieftimov.com/posts/make-resilient-golang-net-http-servers-using-timeouts-deadlines-context-cancellation/
 	srv := &http.Server{
-		Addr:    addr,
-		Handler: r,
+		Addr:              addr,
+		Handler:           r,
+		ReadHeaderTimeout: 2 * time.Second,
 	}
 	go func() {
 		// service connections
