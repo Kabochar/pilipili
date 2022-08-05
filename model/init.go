@@ -7,7 +7,7 @@ import (
 
 	"pilipili/util"
 
-	"gorm.io/driver/mysql"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -26,8 +26,7 @@ func Database(connString string) {
 			Colorful:                  false,         // Disable color
 		},
 	)
-
-	db, err := gorm.Open(mysql.Open(connString), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(os.Getenv("SQLITE_DB")), &gorm.Config{
 		Logger: newLogger,
 	})
 	if err != nil {
