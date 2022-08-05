@@ -78,7 +78,7 @@ func createListener(addr string) (net.Listener, error) {
 	return ln, nil
 }
 
-func CreateOrImportListener(svcName, addr string) (net.Listener, error) {
+func createOrImportListener(svcName, addr string) (net.Listener, error) {
 	// Try and import a listener for addr. If it's found, use it.
 	ln, err := importListener(svcName, addr)
 	if err == nil {
@@ -135,7 +135,7 @@ func forkChild(svcName, addr string, ln net.Listener) (*os.Process, error) {
 	}
 
 	// Get current environment and add in the listener to it.
-	environment := append(os.Environ(), getSvcListenKey(svcName, addr)+string(listenerEnv))
+	environment := append(os.Environ(), getSvcListenKey(svcName, addr)+"="+string(listenerEnv))
 
 	// Get current process name and directory.
 	execName, err := os.Executable()
@@ -158,7 +158,7 @@ func forkChild(svcName, addr string, ln net.Listener) (*os.Process, error) {
 	return p, nil
 }
 
-func WaitForSignals(svcName, addr string, ln net.Listener, server *http.Server) error {
+func waitForSignals(svcName, addr string, ln net.Listener, server *http.Server) error {
 	signalCh := make(chan os.Signal, 5)
 	signal.Notify(signalCh, syscall.SIGHUP, syscall.SIGINT, syscall.SIGQUIT)
 	for {
@@ -175,17 +175,40 @@ func WaitForSignals(svcName, addr string, ln net.Listener, server *http.Server) 
 				}
 				fmt.Printf("Forked child %v.\n", p.Pid)
 			default:
-				// 其他的信号量默认直接退出
+				// other signal default quit server, not graceful shutdown
 				break
 			}
 		}
-		// 注意这里一定要补上，这里要退出外部的for循环的
+		// notice: write this for quit for loop
 		break
 	}
-	// 创建一个默认的context，让其超时后自动退出
+	// create a context with expire time, wait 10*sec to shutdown server
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	// 优雅关闭服务
+	// quit server
 	return server.Shutdown(ctx)
+}
+
+func GracefulShutdown(svcName, addr string, srv *http.Server) {
+	// create/import listener
+	ln, err := createOrImportListener(svcName, addr)
+	if err != nil {
+		fmt.Printf("Unable to create or import a listener: %v.\n", err)
+		return
+	}
+
+	go func() {
+		// service connections
+		if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
+			Log().Panic("listen: %s\n", err)
+		}
+	}()
+
+	// block waiting receive quit signal
+	err = waitForSignals(svcName, addr, ln, srv)
+	if err != nil {
+		Log().Error("Exiting: %v\n", err)
+		return
+	}
 }
