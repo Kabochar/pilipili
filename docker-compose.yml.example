@@ -4,7 +4,7 @@ services:
   pili-api:
     build: ./
     image: pili-api:latest
-    container_name: gili-api
+    container_name: pili-api
     restart: always
     environment:
       MYSQL_DSN: "root:QBwNk5GN5xfB@tcp(mysql:3306)/pilipili?charset=utf8mb4,utf8&parseTime=True&loc=Local"

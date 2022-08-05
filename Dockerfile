@@ -1,4 +1,4 @@
-FROM golang as build
+FROM golang:1.17 as build
 
 # 设置 Proxy
 ENV GOPROXY=https://goproxy.io

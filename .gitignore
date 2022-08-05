@@ -4,3 +4,4 @@
 go.sum
 docker-compose.yml
 fabfile.py
+*.db
